@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Geek Quizz</string>
+    <string name="play_button">Jugar</string>
+    <string name="options_button">Opciones</string>
+</resources>
