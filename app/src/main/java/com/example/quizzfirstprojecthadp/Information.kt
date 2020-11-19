@@ -1,6 +1,6 @@
 package com.example.quizzfirstprojecthadp
 
-class Information() {
+class Information {
 
     var anime = true
     var cine = true
@@ -8,6 +8,10 @@ class Information() {
     var musica = true
     var toons = true
     var videojuegos = true
+
+    var questionsQuantity = 10
+
+    var hintsQuantity = 3
 
 
 }

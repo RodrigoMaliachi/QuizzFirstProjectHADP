@@ -3,9 +3,7 @@ package com.example.quizzfirstprojecthadp.options
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.example.quizzfirstprojecthadp.R
 
@@ -19,11 +17,16 @@ class OptionsActivity : AppCompatActivity() {
     private lateinit var videojuegosBox: CheckBox
     private lateinit var todosBox: CheckBox
 
+    private lateinit var questionSpinner: Spinner
+    private lateinit var hintsSpinner: Spinner
+
     private lateinit var viewModel: OptionsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_options)
+
+        viewModel = ViewModelProvider(this).get(OptionsViewModel::class.java)
 
         animeBox = findViewById(R.id.animeCheckBox)
         cineBox = findViewById(R.id.cineCheckBox)
@@ -33,7 +36,15 @@ class OptionsActivity : AppCompatActivity() {
         videojuegosBox = findViewById(R.id.videojuegosCheckBox)
         todosBox = findViewById(R.id.todosCheckBox)
 
-        viewModel = ViewModelProvider(this).get(OptionsViewModel::class.java)
+        //Inicializa el adaptador del Spinner de preguntas y selecciona la opción guardada en info a través del ViewModel
+        questionSpinner = findViewById(R.id.questionSpinner)
+        questionSpinner.adapter = viewModel.spinnerAdapter(this, R.array.question_spinner)
+        questionSpinner.setSelection(viewModel.questionsQuantity.minus(5))
+
+        //Inicializa el adaptador del Spinner de pistas y selecciona la opción guardada en info a través del ViewModel
+        hintsSpinner = findViewById(R.id.hintsSpinner)
+        hintsSpinner.adapter = viewModel.spinnerAdapter(this, R.array.hints_spinner)
+        hintsSpinner.setSelection(viewModel.hintsQuantity.minus(1))
 
         viewModel.initializeBoxes(listOf(animeBox,cineBox,furryBox,musicaBox,toonsBox,videojuegosBox,todosBox))
 
@@ -43,6 +54,19 @@ class OptionsActivity : AppCompatActivity() {
         musicaBox.setOnCheckedChangeListener(checkBoxesListener)
         toonsBox.setOnCheckedChangeListener(checkBoxesListener)
         videojuegosBox.setOnCheckedChangeListener(checkBoxesListener)
+
+        questionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                viewModel.questionsQuantity = position + 5
+            }
+        }
+        hintsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                viewModel.hintsQuantity = position + 1
+            }
+        }
 
         todosBox.setOnCheckedChangeListener { box, boolean ->
             if ( boolean ){
@@ -55,13 +79,12 @@ class OptionsActivity : AppCompatActivity() {
                 videojuegosBox.isChecked = true
             }
         }
-
-
     }
 
     private val checkBoxesListener = CompoundButton.OnCheckedChangeListener { button, isChecked ->
         viewModel.apply {
 
+            //Cambia la información guardada del tema seleccionado en info
             changeTopics(button.id, isChecked)
 
             if (!isAtLeastOneChecked){
@@ -77,5 +100,4 @@ class OptionsActivity : AppCompatActivity() {
             }
         }
     }
-
 }

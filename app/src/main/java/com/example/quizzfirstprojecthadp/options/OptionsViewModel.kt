@@ -1,9 +1,12 @@
 package com.example.quizzfirstprojecthadp.options
 
+import android.content.Context
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import androidx.lifecycle.ViewModel
-import com.example.quizzfirstprojecthadp.MainActivity
+
+import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
 import com.example.quizzfirstprojecthadp.R
 
 class OptionsViewModel : ViewModel() {
@@ -12,15 +15,23 @@ class OptionsViewModel : ViewModel() {
 
     var isAtLeastOneChecked: Boolean
 
+    var questionsQuantity: Int
+        get() = info.questionsQuantity
+        set(value) { info.questionsQuantity = value }
+
+    var hintsQuantity: Int
+        get() = info.hintsQuantity
+        set(value) { info.hintsQuantity = value }
+
     init {
-        MainActivity.info.apply {
+        info.apply {
             isAtLeastOneChecked = anime || cine || furry || musica || toons || videojuegos
             isEverythingChecked = anime && cine && furry && musica && toons && videojuegos
         }
     }
 
     fun initializeBoxes(boxes: List<CheckBox>) {
-        MainActivity.info.apply {
+        info.apply {
             for (box in boxes) {
                 when (box.id) {
                     R.id.animeCheckBox -> box.isChecked = anime
@@ -36,7 +47,7 @@ class OptionsViewModel : ViewModel() {
     }
 
     fun changeTopics(id: Int, isChecked: Boolean) {
-        MainActivity.info.apply {
+        info.apply {
             when (id) {
                 R.id.animeCheckBox -> anime = isChecked
                 R.id.cineCheckBox -> cine = isChecked
@@ -49,4 +60,11 @@ class OptionsViewModel : ViewModel() {
             isEverythingChecked = anime && cine && furry && musica && toons && videojuegos
         }
     }
+
+    //Función que devuelve el adaptador para un Spinner
+    fun spinnerAdapter(context: Context, resource: Int) = ArrayAdapter
+        .createFromResource(context, resource, android.R.layout.simple_spinner_item)
+        .also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
 }

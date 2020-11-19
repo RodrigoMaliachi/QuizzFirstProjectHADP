@@ -18,4 +18,19 @@
     <string name="switch_pistas">Habilitar pistas</string>
     <string name="cantidad_pistas">Número de pistas</string>
     <string name="guardar">Guardar</string>
+
+    <string-array name="question_spinner">
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="hints_spinner">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>
