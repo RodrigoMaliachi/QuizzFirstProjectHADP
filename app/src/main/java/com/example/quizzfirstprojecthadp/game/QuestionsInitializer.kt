@@ -43,7 +43,12 @@ class QuestionsInitializer {
                 val questionId = topic * 10 + element
 
                 //Genera 1 de las 24 combinaciones posibles para ordenar las respuestas
-                val arranged = Random.nextInt(1..24)
+                val arranged =
+                    when (info.difficulty) {
+                        1 -> Random.nextInt(1..12)
+                        2 -> Random.nextInt(1..18)
+                        else -> Random.nextInt(1..24)
+                    }
 
                 val newQuestion = QuestionInfo(questionId = questionId, arranged = arranged)
 

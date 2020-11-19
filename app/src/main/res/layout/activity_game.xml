@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/hintsUsed"
         app:layout_constraintTop_toTopOf="@+id/hintsUsed"
-        tools:text="@string/hint" />
+        android:text="@string/hint" />
 
     <TextView
         android:id="@+id/question"
