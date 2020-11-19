@@ -5,7 +5,7 @@ class Information {
     var anime = true
     var cine = true
     var furry = true
-    var musica = true
+    var deportes = true
     var toons = true
     var videojuegos = true
 

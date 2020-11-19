@@ -42,16 +42,18 @@ class GameActivity : AppCompatActivity() {
         option4 = findViewById(R.id.optionFour)
 
         viewModel.apply {
-            questionTextView.text = initializer.questions[currentQuestion].id.toString()
+
+//            questionNumberTextView.text =
+            questionTextView.text = questionsList[currentQuestion].question
 
             prevButton.setOnClickListener {
                 next()
-                questionTextView.text = initializer.questions[currentQuestion].id.toString()
+                questionTextView.text = questionsList[currentQuestion].question
             }
 
             nextButton.setOnClickListener {
                 previous()
-                questionTextView.text = initializer.questions[currentQuestion].id.toString()
+                questionTextView.text = questionsList[currentQuestion].question
             }
         }
 

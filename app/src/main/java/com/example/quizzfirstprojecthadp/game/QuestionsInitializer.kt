@@ -6,23 +6,9 @@ import kotlin.random.nextInt
 
 
 class QuestionsInitializer {
-    
-    //Solo se utiliza si se la cantidad de preguntas es menos a 10
-//    private lateinit var emptyQuestion: QuestionInfo
 
-    private var _questionsInfoList: MutableList<QuestionInfo> = mutableListOf()
-    val questionsInfoList: List<QuestionInfo>
-        get() = _questionsInfoList
-
-    private var _questions: MutableList<Question> = mutableListOf()
-    val questions: List<Question>
-        get() = _questions
-
-    init {
-        newQuestions()
-    }
-
-    private fun newQuestions(){
+    fun getQuestionsInfoList(): List<QuestionInfo> {
+        val questionsInfoMutableList = mutableListOf<QuestionInfo>()
 
         val idTemas: MutableSet<Int> = mutableSetOf() //variable que guarda el numero 'id' correspondientes a cada tema
         info.apply {
@@ -32,7 +18,7 @@ class QuestionsInitializer {
                 idTemas.add(1)
             if (furry)
                 idTemas.add(2)
-            if (musica)
+            if (deportes)
                 idTemas.add(3)
             if (toons)
                 idTemas.add(4)
@@ -61,13 +47,19 @@ class QuestionsInitializer {
 
                 val newQuestion = QuestionInfo(questionId = questionId, arranged = arranged)
 
-                _questionsInfoList.add(newQuestion)
+                questionsInfoMutableList.add(newQuestion)
             }
         }
 
-        _questionsInfoList.forEach { questionInfo ->
-            _questions.add(Question.listOfQuestion[questionInfo.questionId])
+        return questionsInfoMutableList.toList()
+    }
+
+    fun getQuestionList(questionsInfoList: List<QuestionInfo>): List<Question> {
+        val questionsMutableList = mutableListOf<Question>()
+        questionsInfoList.forEach { questionInfo ->
+            questionsMutableList.add(Question.listOfQuestion[questionInfo.questionId])
         }
+        return questionsMutableList.toList()
     }
 
     private fun getCantidadDePreguntasPorTema(cantidadDeTemas: Int): List<Int>{

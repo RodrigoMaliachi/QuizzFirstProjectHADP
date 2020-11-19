@@ -13,7 +13,7 @@ class OptionsActivity : AppCompatActivity() {
     private lateinit var animeBox: CheckBox
     private lateinit var cineBox: CheckBox
     private lateinit var furryBox: CheckBox
-    private lateinit var musicaBox: CheckBox
+    private lateinit var deportesBox: CheckBox
     private lateinit var toonsBox: CheckBox
     private lateinit var videojuegosBox: CheckBox
     private lateinit var todosBox: CheckBox
@@ -37,7 +37,7 @@ class OptionsActivity : AppCompatActivity() {
         animeBox = findViewById(R.id.animeCheckBox)
         cineBox = findViewById(R.id.cineCheckBox)
         furryBox = findViewById(R.id.furryCheckBox)
-        musicaBox = findViewById(R.id.musicaCheckBox)
+        deportesBox = findViewById(R.id.deportesCheckBox)
         toonsBox = findViewById(R.id.toonsCheckBox)
         videojuegosBox = findViewById(R.id.videojuegosCheckBox)
         todosBox = findViewById(R.id.todosCheckBox)
@@ -64,12 +64,12 @@ class OptionsActivity : AppCompatActivity() {
             hintSpinnerLayout.visibility = if (it) View.VISIBLE else View.INVISIBLE
         }
 
-        viewModel.initializeBoxes(listOf(animeBox,cineBox,furryBox,musicaBox,toonsBox,videojuegosBox,todosBox))
+        viewModel.initializeBoxes(listOf(animeBox,cineBox,furryBox,deportesBox,toonsBox,videojuegosBox,todosBox))
 
         animeBox.setOnCheckedChangeListener(checkBoxesListener)
         cineBox.setOnCheckedChangeListener(checkBoxesListener)
         furryBox.setOnCheckedChangeListener(checkBoxesListener)
-        musicaBox.setOnCheckedChangeListener(checkBoxesListener)
+        deportesBox.setOnCheckedChangeListener(checkBoxesListener)
         toonsBox.setOnCheckedChangeListener(checkBoxesListener)
         videojuegosBox.setOnCheckedChangeListener(checkBoxesListener)
 
@@ -79,7 +79,7 @@ class OptionsActivity : AppCompatActivity() {
                 animeBox.isChecked = true
                 cineBox.isChecked = true
                 furryBox.isChecked = true
-                musicaBox.isChecked = true
+                deportesBox.isChecked = true
                 toonsBox.isChecked = true
                 videojuegosBox.isChecked = true
             }

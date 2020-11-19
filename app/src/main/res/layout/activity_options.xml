@@ -63,10 +63,10 @@
                 android:orientation="vertical">
 
                 <CheckBox
-                    android:id="@+id/musicaCheckBox"
+                    android:id="@+id/deportesCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/musica"
+                    android:text="@string/deportes"
                     android:textSize="16sp" />
 
                 <CheckBox

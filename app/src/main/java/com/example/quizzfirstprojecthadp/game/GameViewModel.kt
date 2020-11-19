@@ -5,7 +5,10 @@ import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
 
 class GameViewModel : ViewModel() {
 
-    val initializer = QuestionsInitializer()
+    private val initializer = QuestionsInitializer()
+
+    val questionsInfoList = initializer.getQuestionsInfoList()
+    val questionsList = initializer.getQuestionList(questionsInfoList)
 
     val questionQuantity = info.questionsQuantity
 
