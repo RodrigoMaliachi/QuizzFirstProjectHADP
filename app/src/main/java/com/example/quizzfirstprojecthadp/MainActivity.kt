@@ -1,10 +1,16 @@
 package com.example.quizzfirstprojecthadp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
+import com.example.quizzfirstprojecthadp.options.OptionsActivity
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        val info = Information()
+    }
 
     private lateinit var playButton: Button
     private lateinit var optionsButton: Button
@@ -21,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         optionsButton.setOnClickListener {
-
+            val intent = Intent(this, OptionsActivity::class.java)
+            startActivity(intent)
         }
     }
 }

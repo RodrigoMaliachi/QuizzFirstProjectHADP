@@ -2,4 +2,20 @@
     <string name="app_name">Geek Quizz</string>
     <string name="play_button">Jugar</string>
     <string name="options_button">Opciones</string>
+    <string name="temas">Temas</string>
+    <string name="anime">Anime</string>
+    <string name="cine">Cine</string>
+    <string name="furry">Furry</string>
+    <string name="musica">Música</string>
+    <string name="toons">Toons</string>
+    <string name="videojuegos">Videojuegos</string>
+    <string name="todos">Todos</string>
+    <string name="numero_preguntas">Cantidad de preguntas</string>
+    <string name="dificultad">Dificultad</string>
+    <string name="baja">Baja</string>
+    <string name="media">Media</string>
+    <string name="alta">Alta</string>
+    <string name="switch_pistas">Habilitar pistas</string>
+    <string name="cantidad_pistas">Número de pistas</string>
+    <string name="guardar">Guardar</string>
 </resources>
