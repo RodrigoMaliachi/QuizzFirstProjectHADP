@@ -18,6 +18,16 @@
     <string name="switch_pistas">Habilitar pistas</string>
     <string name="cantidad_pistas">Número de pistas</string>
     <string name="guardar">Guardar</string>
+    <string name="question_number">Pregunta: %d/%d</string>
+    <string name="hints_used">Pistas usadas: %d/%d</string>
+    <string name="hint">Usar Pista</string>
+    <string name="question">Pregunta</string>
+    <string name="previous">Anterior</string>
+    <string name="next">Siguiente</string>
+    <string name="option_one">Respuesta 1</string>
+    <string name="option_two">Respuesta 2</string>
+    <string name="option_three">Respuesta 3</string>
+    <string name="option_four">Respuesta 4</string>
 
     <string-array name="question_spinner">
         <item>5</item>

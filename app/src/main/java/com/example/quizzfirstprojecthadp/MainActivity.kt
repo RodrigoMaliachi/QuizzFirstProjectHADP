@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
+import com.example.quizzfirstprojecthadp.game.GameActivity
 import com.example.quizzfirstprojecthadp.options.OptionsActivity
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         optionsButton = findViewById(R.id.optionsButton)
 
         playButton.setOnClickListener {
-
+            val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
         }
 
         optionsButton.setOnClickListener {
