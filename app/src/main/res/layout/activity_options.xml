@@ -179,7 +179,7 @@
         app:layout_constraintTop_toBottomOf="@+id/difficultyLayout">
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchClues"
+            android:id="@+id/hintSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/switch_pistas"

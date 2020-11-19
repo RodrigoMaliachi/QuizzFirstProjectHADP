@@ -23,6 +23,14 @@ class OptionsViewModel : ViewModel() {
         get() = info.hintsQuantity
         set(value) { info.hintsQuantity = value }
 
+    var difficulty: Int
+        get() = info.difficulty
+        set(value) { info.difficulty = value }
+
+    var isHintsEnabled: Boolean
+        get() = info.isHintsEnabled
+        set(value) { info.isHintsEnabled = value }
+
     init {
         info.apply {
             isAtLeastOneChecked = anime || cine || furry || musica || toons || videojuegos

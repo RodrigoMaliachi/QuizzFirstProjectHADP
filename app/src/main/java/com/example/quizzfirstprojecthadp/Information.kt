@@ -13,5 +13,8 @@ class Information {
 
     var hintsQuantity = 3
 
+    var difficulty = 3
+
+    var isHintsEnabled = false
 
 }

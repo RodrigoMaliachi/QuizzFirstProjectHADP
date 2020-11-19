@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.quizzfirstprojecthadp.R
 
@@ -19,6 +20,11 @@ class OptionsActivity : AppCompatActivity() {
 
     private lateinit var questionSpinner: Spinner
     private lateinit var hintsSpinner: Spinner
+
+    private lateinit var difficultyRadioButton: RadioGroup
+
+    private lateinit var hintSwitch: SwitchCompat
+    private lateinit var hintSpinnerLayout: LinearLayout
 
     private lateinit var viewModel: OptionsViewModel
 
@@ -46,6 +52,18 @@ class OptionsActivity : AppCompatActivity() {
         hintsSpinner.adapter = viewModel.spinnerAdapter(this, R.array.hints_spinner)
         hintsSpinner.setSelection(viewModel.hintsQuantity.minus(1))
 
+        //Selecciona la dificultad guardada
+        difficultyRadioButton = findViewById(R.id.difficultyRadioGroup)
+        difficultyRadioButton.check(idDifficultyButton())
+
+        //Activa o desactiva las pistas segun la info guardada
+        hintSwitch = findViewById(R.id.hintSwitch)
+        hintSpinnerLayout = findViewById(R.id.hintsSpinnerLayout)
+        viewModel.isHintsEnabled.let {
+            hintSwitch.isChecked = it
+            hintSpinnerLayout.visibility = if (it) View.VISIBLE else View.INVISIBLE
+        }
+
         viewModel.initializeBoxes(listOf(animeBox,cineBox,furryBox,musicaBox,toonsBox,videojuegosBox,todosBox))
 
         animeBox.setOnCheckedChangeListener(checkBoxesListener)
@@ -54,6 +72,18 @@ class OptionsActivity : AppCompatActivity() {
         musicaBox.setOnCheckedChangeListener(checkBoxesListener)
         toonsBox.setOnCheckedChangeListener(checkBoxesListener)
         videojuegosBox.setOnCheckedChangeListener(checkBoxesListener)
+
+        todosBox.setOnCheckedChangeListener { box, boolean ->
+            if ( boolean ){
+                box.isChecked = false
+                animeBox.isChecked = true
+                cineBox.isChecked = true
+                furryBox.isChecked = true
+                musicaBox.isChecked = true
+                toonsBox.isChecked = true
+                videojuegosBox.isChecked = true
+            }
+        }
 
         questionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -68,18 +98,26 @@ class OptionsActivity : AppCompatActivity() {
             }
         }
 
-        todosBox.setOnCheckedChangeListener { box, boolean ->
-            if ( boolean ){
-                box.isChecked = false
-                animeBox.isChecked = true
-                cineBox.isChecked = true
-                furryBox.isChecked = true
-                musicaBox.isChecked = true
-                toonsBox.isChecked = true
-                videojuegosBox.isChecked = true
+        difficultyRadioButton.setOnCheckedChangeListener { _, idButton ->
+            when (idButton) {
+                R.id.highButton -> viewModel.difficulty = 3
+                R.id.mediumButton -> viewModel.difficulty = 2
+                R.id.lowButton -> viewModel.difficulty = 1
             }
         }
+
+        hintSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.isHintsEnabled = isChecked
+            hintSpinnerLayout.visibility = if (isChecked) View.VISIBLE else View.INVISIBLE
+        }
     }
+
+    private fun idDifficultyButton() =
+        when (viewModel.difficulty) {
+            3 -> R.id.highButton
+            2 -> R.id.mediumButton
+            else -> R.id.lowButton
+        }
 
     private val checkBoxesListener = CompoundButton.OnCheckedChangeListener { button, isChecked ->
         viewModel.apply {
