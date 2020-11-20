@@ -18,10 +18,10 @@ class GameViewModel : ViewModel() {
     val difficulty = info.difficulty
     val isHintClickable = info.isHintsEnabled
 
-    private var space1 = 0
-    private var space2 = 0
-    private var space3 = 0
-    private var space4 = 0
+    var space1 = 0
+    var space2 = 0
+    var space3 = 0
+    var space4 = 0
 
     var option1 = ""
     var option2 = ""
