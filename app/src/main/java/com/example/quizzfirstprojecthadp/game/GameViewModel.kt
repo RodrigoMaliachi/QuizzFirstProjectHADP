@@ -5,6 +5,7 @@ import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
 
 class GameViewModel : ViewModel() {
 
+    var score = 0.0
     private val initializer = QuestionsInitializer()
 
     val questionsInfoList = initializer.getQuestionsInfoList()
@@ -116,5 +117,18 @@ class GameViewModel : ViewModel() {
             3 -> currentQuestion.option3
             else -> currentQuestion.option4
         }
+    }
+
+    fun isFinish() : Boolean {
+        var questionsAnswered = 0
+        questionsInfoList.forEach {
+            if (it.answer != 0)
+                questionsAnswered++
+        }
+        return questionsAnswered == questionsInfoList.size
+    }
+
+    fun addPoints(points: Double) {
+        score += points
     }
 }

@@ -62,7 +62,7 @@ class GameActivity : AppCompatActivity() {
 
             questionNumberTextView.text = questionNumberCounterString
             hintsUsedTextView.text = hintsUsedCounterString
-            questionTextView.text = questionsList[currentQuestionIndex].question
+            questionTextView.text = currentQuestion.question
             button1.text = option1
             button2.text = option2
             button3.text = option3
@@ -72,28 +72,12 @@ class GameActivity : AppCompatActivity() {
 
             prevButton.setOnClickListener {
                 previous()
-                questionNumberTextView.text = questionNumberCounterString
-                questionTextView.text = questionsList[currentQuestionIndex].question
-                button1.text = option1
-                button2.text = option2
-                button3.text = option3
-                button4.text = option4
-                changeRadioGroupStatus()
-                updateColors()
-                hintButton.visibility = if (isHintClickable) View.VISIBLE else View.INVISIBLE
+                updateScreen()
             }
 
             nextButton.setOnClickListener {
                 next()
-                questionNumberTextView.text = questionNumberCounterString
-                questionTextView.text = questionsList[currentQuestionIndex].question
-                button1.text = option1
-                button2.text = option2
-                button3.text = option3
-                button4.text = option4
-                changeRadioGroupStatus()
-                updateColors()
-                hintButton.visibility = if (isHintClickable) View.VISIBLE else View.INVISIBLE
+                updateScreen()
             }
 
             hintButton.setOnClickListener {
@@ -116,16 +100,40 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    private fun GameViewModel.updateScreen() {
+        questionNumberTextView.text = questionNumberCounterString
+        questionTextView.text = currentQuestion.question
+        button1.text = option1
+        button2.text = option2
+        button3.text = option3
+        button4.text = option4
+        changeRadioGroupStatus()
+        updateColors()
+        hintButton.visibility = if (isHintClickable) View.VISIBLE else View.INVISIBLE
+    }
+
     private val radioButtonListener = CompoundButton.OnCheckedChangeListener { button, isChecked ->
         viewModel.apply {
-            if (isChecked && questionsInfoList[currentQuestionIndex].answer == 0) {
-                questionsInfoList[currentQuestionIndex].answer =
+            if (isChecked && currentQuestionInfo.answer == 0) {
+                currentQuestionInfo.answer =
                     when (button.id) {
                         R.id.optionOne -> 1
                         R.id.optionTwo -> 2
                         R.id.optionThree -> 3
                         else -> 4
                     }
+
+                when {
+                    currentQuestionInfo.answer == 1 && space1 == 1 -> addPoints(difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1))
+                    currentQuestionInfo.answer == 2 && space2 == 1 -> addPoints(difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1))
+                    currentQuestionInfo.answer == 3 && space3 == 1 -> addPoints(difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1))
+                    currentQuestionInfo.answer == 4 && space4 == 1 -> addPoints(difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1))
+                }
+
+                if (isFinish()) {
+                    Toast.makeText(this@GameActivity, "Tu puntaje es de: ${score.toInt()}", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
         }
     }
