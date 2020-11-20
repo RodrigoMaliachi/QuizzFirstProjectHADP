@@ -128,7 +128,13 @@ class GameViewModel : ViewModel() {
         return questionsAnswered == questionsInfoList.size
     }
 
-    fun addPoints(points: Double) {
-        score += points
+    fun addPoints() {
+        score += when {
+            currentQuestionInfo.answer == 1 && space1 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
+            currentQuestionInfo.answer == 2 && space2 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
+            currentQuestionInfo.answer == 3 && space3 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
+            currentQuestionInfo.answer == 4 && space4 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
+            else -> 0.0
+        }
     }
 }
