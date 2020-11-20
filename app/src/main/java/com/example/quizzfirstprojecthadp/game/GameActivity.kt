@@ -122,9 +122,9 @@ class GameActivity : AppCompatActivity() {
                     if (questionsInfoList[currentQuestion].answer == 0) {
                         questionsInfoList[currentQuestion].answer = answer
                     }
-                    changeRadioGroupStatus()
-                    updateColors()
                 }
+                changeRadioGroupStatus()
+                updateColors()
             }
         }
     }
@@ -157,30 +157,28 @@ class GameActivity : AppCompatActivity() {
     private fun changeRadioGroupStatus() {
         viewModel.apply {
             if (questionsInfoList[currentQuestion].answer == 0) {
+                button1.isClickable = true
+                button2.isClickable = true
+                button3.isClickable = true
+                button4.isClickable = true
 
                 button1.isChecked = false
                 button2.isChecked = false
                 button3.isChecked = false
                 button4.isChecked = false
-
-                button1.isClickable = true
-                button2.isClickable = true
-                button3.isClickable = true
-                button4.isClickable = true
             } else {
+                button1.isClickable = false
+                button2.isClickable = false
+                button3.isClickable = false
+                button4.isClickable = false
+
                 when (questionsInfoList[currentQuestion].answer) {
                     1 -> button1.isChecked = true
                     2 -> button2.isChecked = true
                     3 -> button3.isChecked = true
                     4 -> button4.isChecked = true
                 }
-
-                button1.isClickable = false
-                button2.isClickable = false
-                button3.isClickable = false
-                button4.isClickable = false
             }
         }
-
     }
 }
