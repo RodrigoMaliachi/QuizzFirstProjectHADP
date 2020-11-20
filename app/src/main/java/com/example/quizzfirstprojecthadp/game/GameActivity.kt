@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
+import com.example.quizzfirstprojecthadp.MainActivity
 import com.example.quizzfirstprojecthadp.R
 
 class GameActivity : AppCompatActivity() {
@@ -53,14 +54,15 @@ class GameActivity : AppCompatActivity() {
                     button3.visibility = View.INVISIBLE
             }
 
-            if (!isHintClickable) {
+            if (!MainActivity.info.isHintsEnabled) {
                 hintsUsedTextView.visibility = View.INVISIBLE
-                hintButton.visibility = View.INVISIBLE
             }
+
+            hintButton.visibility = if (isHintClickable) View.VISIBLE else View.INVISIBLE
 
             questionNumberTextView.text = questionNumberCounterString
             hintsUsedTextView.text = hintsUsedCounterString
-            questionTextView.text = questionsList[currentQuestion].question
+            questionTextView.text = questionsList[currentQuestionIndex].question
             button1.text = option1
             button2.text = option2
             button3.text = option3
@@ -71,7 +73,7 @@ class GameActivity : AppCompatActivity() {
             prevButton.setOnClickListener {
                 previous()
                 questionNumberTextView.text = questionNumberCounterString
-                questionTextView.text = questionsList[currentQuestion].question
+                questionTextView.text = questionsList[currentQuestionIndex].question
                 button1.text = option1
                 button2.text = option2
                 button3.text = option3
@@ -84,7 +86,7 @@ class GameActivity : AppCompatActivity() {
             nextButton.setOnClickListener {
                 next()
                 questionNumberTextView.text = questionNumberCounterString
-                questionTextView.text = questionsList[currentQuestion].question
+                questionTextView.text = questionsList[currentQuestionIndex].question
                 button1.text = option1
                 button2.text = option2
                 button3.text = option3
@@ -95,12 +97,11 @@ class GameActivity : AppCompatActivity() {
             }
 
             hintButton.setOnClickListener {
-//                hintUsed()
+                hintUsed()
                 changeRadioGroupStatus()
                 updateColors()
                 hintsUsedTextView.text = hintsUsedCounterString
-                if (!isHintClickable)
-                    hintButton.visibility = View.INVISIBLE
+                hintButton.visibility = if (isHintClickable) View.VISIBLE else View.INVISIBLE
             }
 
             radioGroup.setOnCheckedChangeListener { _, _ ->
@@ -117,8 +118,8 @@ class GameActivity : AppCompatActivity() {
 
     private val radioButtonListener = CompoundButton.OnCheckedChangeListener { button, isChecked ->
         viewModel.apply {
-            if (isChecked && questionsInfoList[currentQuestion].answer == 0) {
-                questionsInfoList[currentQuestion].answer =
+            if (isChecked && questionsInfoList[currentQuestionIndex].answer == 0) {
+                questionsInfoList[currentQuestionIndex].answer =
                     when (button.id) {
                         R.id.optionOne -> 1
                         R.id.optionTwo -> 2
@@ -131,7 +132,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun updateColors() {
         viewModel.apply {
-            val answer = questionsInfoList[currentQuestion].answer
+            val answer = questionsInfoList[currentQuestionIndex].answer
             button1.setBackgroundColor(Color.TRANSPARENT)
             button2.setBackgroundColor(Color.TRANSPARENT)
             button3.setBackgroundColor(Color.TRANSPARENT)
@@ -150,13 +151,28 @@ class GameActivity : AppCompatActivity() {
                     space3 == 1 -> button3.setBackgroundColor(Color.GREEN)
                     space4 == 1 -> button4.setBackgroundColor(Color.GREEN)
                 }
+            } else if (MainActivity.info.isHintsEnabled && currentQuestionInfo.hintsUsedList.isNotEmpty()) {
+                currentQuestionInfo.hintsUsedList.forEach {
+                    when (it) {
+                        1 -> button1.visibility = View.INVISIBLE
+                        2 -> button2.visibility = View.INVISIBLE
+                        3 -> button3.visibility = View.INVISIBLE
+                        4 -> button4.visibility = View.INVISIBLE
+                    }
+                }
             }
         }
     }
 
     private fun changeRadioGroupStatus() {
         viewModel.apply {
-            if (questionsInfoList[currentQuestion].answer == 0) {
+
+            button1.visibility = View.VISIBLE
+            button2.visibility = View.VISIBLE
+            button3.visibility = View.VISIBLE
+            button4.visibility = View.VISIBLE
+
+            if (questionsInfoList[currentQuestionIndex].answer == 0) {
                 button1.isClickable = true
                 button2.isClickable = true
                 button3.isClickable = true
@@ -172,7 +188,7 @@ class GameActivity : AppCompatActivity() {
                 button3.isClickable = false
                 button4.isClickable = false
 
-                when (questionsInfoList[currentQuestion].answer) {
+                when (questionsInfoList[currentQuestionIndex].answer) {
                     1 -> button1.isChecked = true
                     2 -> button2.isChecked = true
                     3 -> button3.isChecked = true

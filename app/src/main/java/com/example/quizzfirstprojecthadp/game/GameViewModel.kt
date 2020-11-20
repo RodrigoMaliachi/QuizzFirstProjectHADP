@@ -9,14 +9,17 @@ class GameViewModel : ViewModel() {
 
     val questionsInfoList = initializer.getQuestionsInfoList()
     val questionsList = initializer.getQuestionList(questionsInfoList)
+    val possibleHints = mutableListOf(1,2,3,4)
 
     private val questionQuantity = info.questionsQuantity
     private val hintsQuantity = info.hintsQuantity
 
-    var currentQuestion = 0
+    var currentQuestionIndex = 0
+    var currentQuestion = questionsList[currentQuestionIndex]
+    var currentQuestionInfo = questionsInfoList[currentQuestionIndex]
     var hintsUsed = 0
     val difficulty = info.difficulty
-    var isHintClickable = info.isHintsEnabled
+    var isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && currentQuestionInfo.answer == 0
 
     var space1 = 0
     var space2 = 0
@@ -29,7 +32,7 @@ class GameViewModel : ViewModel() {
     var option4 = ""
 
     val questionNumberCounterString: String
-        get() = "Pregunta: ${currentQuestion + 1}/$questionQuantity"
+        get() = "Pregunta: ${currentQuestionIndex + 1}/$questionQuantity"
 
     val hintsUsedCounterString: String
         get() = "Pistas usadas: $hintsUsed/$hintsQuantity"
@@ -40,35 +43,41 @@ class GameViewModel : ViewModel() {
 
     fun hintUsed(){
         hintsUsed++
-        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && questionsInfoList[currentQuestion].answer != 0
 
-        when (difficulty) {
-            1 -> {
-                questionsInfoList[currentQuestion].answer = if (space1 == 1) 1 else 2
-            }
-            2 -> {
-
-            }
-            3 -> {
-
-            }
+        if (possibleHints.size > 1) {
+            currentQuestionInfo.hintsUsedList.add(possibleHints[0])
+            possibleHints.removeAt(0)
+        } else {
+            currentQuestionInfo.answer =
+                when {
+                    space1 == 1 -> 1
+                    space2 == 1 -> 2
+                    space3 == 1 -> 3
+                    else -> 4
+                }
         }
+
+        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && currentQuestionInfo.answer == 0
     }
 
     fun previous() {
-        currentQuestion = (currentQuestion - 1 + questionQuantity) % questionQuantity
-        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && questionsInfoList[currentQuestion].answer != 0
+        currentQuestionIndex = (currentQuestionIndex - 1 + questionQuantity) % questionQuantity
+        currentQuestion = questionsList[currentQuestionIndex]
+        currentQuestionInfo = questionsInfoList[currentQuestionIndex]
+        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && currentQuestionInfo.answer == 0
         updateOptions()
     }
 
     fun next() {
-        currentQuestion = (currentQuestion + 1 + questionQuantity) % questionQuantity
-        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && questionsInfoList[currentQuestion].answer != 0
+        currentQuestionIndex = (currentQuestionIndex + 1 + questionQuantity) % questionQuantity
+        currentQuestion = questionsList[currentQuestionIndex]
+        currentQuestionInfo = questionsInfoList[currentQuestionIndex]
+        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && currentQuestionInfo.answer == 0
         updateOptions()
     }
 
     private fun updateOptions() {
-        var arrange = questionsInfoList[currentQuestion].getConvertedArrange()
+        var arrange = currentQuestionInfo.getConvertedArrange()
         space1 = arrange / 1000
         arrange -= space1 * 1000
         space2 = arrange / 100
@@ -80,14 +89,32 @@ class GameViewModel : ViewModel() {
         option2 = optionForSpace(space2)
         option3 = optionForSpace(space3)
         option4 = optionForSpace(space4)
+
+        if (info.isHintsEnabled) {
+            updatePossibleHintsList()
+        }
+    }
+
+    private fun updatePossibleHintsList() {
+        possibleHints.clear()
+        if (difficulty == 3)
+            if (space4 != 1) possibleHints.add(4)
+
+        if (difficulty > 1)
+            if (space3 != 1) possibleHints.add(3)
+
+        if (space2 != 1) possibleHints.add(2)
+        if (space1 != 1) possibleHints.add(1)
+
+        possibleHints.shuffle()
     }
 
     private fun optionForSpace(space: Int): String {
         return when (space) {
-            1 -> questionsList[currentQuestion].option1
-            2 -> questionsList[currentQuestion].option2
-            3 -> questionsList[currentQuestion].option3
-            else -> questionsList[currentQuestion].option4
+            1 -> currentQuestion.option1
+            2 -> currentQuestion.option2
+            3 -> currentQuestion.option3
+            else -> currentQuestion.option4
         }
     }
 }

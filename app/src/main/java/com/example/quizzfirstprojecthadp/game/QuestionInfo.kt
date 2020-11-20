@@ -1,6 +1,6 @@
 package com.example.quizzfirstprojecthadp.game
 
-class QuestionInfo (val questionId: Int, private val arranged: Int, var answer: Int = 0, var hintsUsed: Int = 0){
+class QuestionInfo (val questionId: Int, private val arranged: Int, var answer: Int = 0, val hintsUsedList: MutableList<Int> = mutableListOf()){
 
     fun getConvertedArrange() =
         when (arranged) {
