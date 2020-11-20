@@ -8,9 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
-import kotlin.math.max
+import com.example.quizzfirstprojecthadp.game.GameActivity
 
-class EndDialog(private val score: Int): DialogFragment(){
+class EndDialog: DialogFragment(){
 
     private lateinit var image: ImageView
     private lateinit var messageTextView: TextView
@@ -21,6 +21,8 @@ class EndDialog(private val score: Int): DialogFragment(){
         savedInstanceState: Bundle?
     ): View? {
         val dialogView = inflater.inflate(R.layout.dialog_end,container,false)
+
+        val score = GameActivity.score.toInt()
 
         image = dialogView.findViewById(R.id.finish_game_image)
         messageTextView = dialogView.findViewById(R.id.score)

@@ -29,9 +29,15 @@ class GameActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GameViewModel
 
+    companion object{
+        var score = 0.0
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        score = 0.0
 
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
@@ -127,7 +133,8 @@ class GameActivity : AppCompatActivity() {
                 addPoints()
 
                 if (isFinish()) {
-                    val dialog = EndDialog(score.toInt())
+                    val dialog = EndDialog()
+                    GameActivity.score = score
                     dialog.show(supportFragmentManager, "End Game")
                 }
             }

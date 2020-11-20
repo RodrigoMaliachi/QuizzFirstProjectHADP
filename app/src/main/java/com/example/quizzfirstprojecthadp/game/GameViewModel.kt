@@ -9,8 +9,8 @@ class GameViewModel : ViewModel() {
     private val initializer = QuestionsInitializer()
 
     val questionsInfoList = initializer.getQuestionsInfoList()
-    val questionsList = initializer.getQuestionList(questionsInfoList)
-    val possibleHints = mutableListOf(1,2,3,4)
+    private val questionsList = initializer.getQuestionList(questionsInfoList)
+    private val possibleHints = mutableListOf(1,2,3,4)
 
     private val questionQuantity = info.questionsQuantity
     private val hintsQuantity = info.hintsQuantity
