@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
+import kotlin.math.max
 
 class EndDialog(private val score: Int): DialogFragment(){
 
@@ -24,10 +25,10 @@ class EndDialog(private val score: Int): DialogFragment(){
         image = dialogView.findViewById(R.id.finish_game_image)
         messageTextView = dialogView.findViewById(R.id.score)
 
-        val maxScore = info.difficulty * 100 * info.questionsQuantity
+        val maxScore = info.difficulty * 100.0 * info.questionsQuantity
         when {
-            score / maxScore >= 2 * maxScore / 3 -> image.setImageResource(R.drawable.high_score)
-            score / maxScore < maxScore / 3 -> image.setImageResource(R.drawable.low_score)
+            score / maxScore >= 2 / 3.0 -> image.setImageResource(R.drawable.high_score)
+            score / maxScore <= 1 / 3.0 -> image.setImageResource(R.drawable.low_score)
             else -> image.setImageResource(R.drawable.medium_score)
         }
         val message = "$score puntos"
