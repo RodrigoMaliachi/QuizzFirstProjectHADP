@@ -169,8 +169,12 @@ class GameActivity : AppCompatActivity() {
 
             button1.visibility = View.VISIBLE
             button2.visibility = View.VISIBLE
-            button3.visibility = View.VISIBLE
-            button4.visibility = View.VISIBLE
+
+            if (difficulty > 1)
+                button3.visibility = View.VISIBLE
+
+            if (difficulty > 2)
+                button4.visibility = View.VISIBLE
 
             if (questionsInfoList[currentQuestionIndex].answer == 0) {
                 button1.isClickable = true
