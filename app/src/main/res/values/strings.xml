@@ -28,6 +28,8 @@
     <string name="option_two">Respuesta 2</string>
     <string name="option_three">Respuesta 3</string>
     <string name="option_four">Respuesta 4</string>
+    <string name="end_game">Fin del juego</string>
+    <string name="okay">Okay</string>
 
     <string-array name="question_spinner">
         <item>5</item>

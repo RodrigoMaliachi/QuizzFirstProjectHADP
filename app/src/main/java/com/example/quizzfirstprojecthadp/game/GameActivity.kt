@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
+import com.example.quizzfirstprojecthadp.EndDialog
 import com.example.quizzfirstprojecthadp.MainActivity
 import com.example.quizzfirstprojecthadp.R
 
@@ -131,8 +132,8 @@ class GameActivity : AppCompatActivity() {
                 }
 
                 if (isFinish()) {
-                    Toast.makeText(this@GameActivity, "Tu puntaje es de: ${score.toInt()}", Toast.LENGTH_SHORT).show()
-                    finish()
+                    val dialog = EndDialog(score.toInt())
+                    dialog.show(supportFragmentManager, "End Game")
                 }
             }
         }

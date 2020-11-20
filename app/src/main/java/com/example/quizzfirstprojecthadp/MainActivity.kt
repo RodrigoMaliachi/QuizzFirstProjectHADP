@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         playButton.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, 1)
         }
 
         optionsButton.setOnClickListener {
