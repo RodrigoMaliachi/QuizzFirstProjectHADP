@@ -16,7 +16,7 @@ class GameViewModel : ViewModel() {
     var currentQuestion = 0
     var hintsUsed = 0
     val difficulty = info.difficulty
-    val isHintClickable = info.isHintsEnabled
+    var isHintClickable = info.isHintsEnabled
 
     var space1 = 0
     var space2 = 0
@@ -32,19 +32,38 @@ class GameViewModel : ViewModel() {
         get() = "Pregunta: ${currentQuestion + 1}/$questionQuantity"
 
     val hintsUsedCounterString: String
-        get() = "Pistas usadas: ${hintsUsed + 1}/$hintsQuantity"
+        get() = "Pistas usadas: $hintsUsed/$hintsQuantity"
 
     init {
         updateOptions()
     }
 
+    fun hintUsed(){
+        hintsUsed++
+        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && questionsInfoList[currentQuestion].answer != 0
+
+        when (difficulty) {
+            1 -> {
+                questionsInfoList[currentQuestion].answer = if (space1 == 1) 1 else 2
+            }
+            2 -> {
+
+            }
+            3 -> {
+
+            }
+        }
+    }
+
     fun previous() {
         currentQuestion = (currentQuestion - 1 + questionQuantity) % questionQuantity
+        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && questionsInfoList[currentQuestion].answer != 0
         updateOptions()
     }
 
     fun next() {
         currentQuestion = (currentQuestion + 1 + questionQuantity) % questionQuantity
+        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && questionsInfoList[currentQuestion].answer != 0
         updateOptions()
     }
 

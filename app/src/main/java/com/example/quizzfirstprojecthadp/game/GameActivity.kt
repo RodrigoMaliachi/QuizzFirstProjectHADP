@@ -4,10 +4,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.example.quizzfirstprojecthadp.R
 
@@ -81,6 +78,7 @@ class GameActivity : AppCompatActivity() {
                 button4.text = option4
                 changeRadioGroupStatus()
                 updateColors()
+                hintButton.visibility = if (isHintClickable) View.VISIBLE else View.INVISIBLE
             }
 
             nextButton.setOnClickListener {
@@ -93,38 +91,40 @@ class GameActivity : AppCompatActivity() {
                 button4.text = option4
                 changeRadioGroupStatus()
                 updateColors()
+                hintButton.visibility = if (isHintClickable) View.VISIBLE else View.INVISIBLE
             }
 
-            radioGroup.setOnCheckedChangeListener { _, buttonId ->
-                val answer: Int
-                val buttonSelected: RadioButton
-
-                when (buttonId) {
-                    button1.id -> {
-                        answer = 1
-                        buttonSelected = button1
-                    }
-                    button2.id -> {
-                        answer = 2
-                        buttonSelected = button2
-                    }
-                    button3.id -> {
-                        answer = 3
-                        buttonSelected = button3
-                    }
-                    else -> {
-                        answer = 4
-                        buttonSelected = button4
-                    }
-                }
-
-                if (buttonSelected.isChecked) {
-                    if (questionsInfoList[currentQuestion].answer == 0) {
-                        questionsInfoList[currentQuestion].answer = answer
-                    }
-                }
+            hintButton.setOnClickListener {
+//                hintUsed()
                 changeRadioGroupStatus()
                 updateColors()
+                hintsUsedTextView.text = hintsUsedCounterString
+                if (!isHintClickable)
+                    hintButton.visibility = View.INVISIBLE
+            }
+
+            radioGroup.setOnCheckedChangeListener { _, _ ->
+                changeRadioGroupStatus()
+                updateColors()
+            }
+
+            button1.setOnCheckedChangeListener(radioButtonListener)
+            button2.setOnCheckedChangeListener(radioButtonListener)
+            button3.setOnCheckedChangeListener(radioButtonListener)
+            button4.setOnCheckedChangeListener(radioButtonListener)
+        }
+    }
+
+    private val radioButtonListener = CompoundButton.OnCheckedChangeListener { button, isChecked ->
+        viewModel.apply {
+            if (isChecked && questionsInfoList[currentQuestion].answer == 0) {
+                questionsInfoList[currentQuestion].answer =
+                    when (button.id) {
+                        R.id.optionOne -> 1
+                        R.id.optionTwo -> 2
+                        R.id.optionThree -> 3
+                        else -> 4
+                    }
             }
         }
     }
