@@ -30,6 +30,8 @@
     <string name="option_four">Respuesta 4</string>
     <string name="end_game">Fin del juego</string>
     <string name="okay">Okay</string>
+    <string name="default_user">Usuario</string>
+    <string name="score_button">Puntuaciones</string>
 
     <string-array name="question_spinner">
         <item>5</item>

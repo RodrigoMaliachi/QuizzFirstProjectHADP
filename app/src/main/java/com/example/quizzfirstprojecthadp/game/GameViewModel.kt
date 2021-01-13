@@ -1,7 +1,7 @@
 package com.example.quizzfirstprojecthadp.game
 
 import androidx.lifecycle.ViewModel
-import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
+import com.example.quizzfirstprojecthadp.main.MainActivity.Companion.info
 
 class GameViewModel : ViewModel() {
 

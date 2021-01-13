@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import androidx.lifecycle.ViewModel
 
-import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
+import com.example.quizzfirstprojecthadp.main.MainActivity.Companion.info
 import com.example.quizzfirstprojecthadp.R
 
 class OptionsViewModel : ViewModel() {

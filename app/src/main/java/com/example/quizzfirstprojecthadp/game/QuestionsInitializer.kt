@@ -1,6 +1,6 @@
 package com.example.quizzfirstprojecthadp.game
 
-import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
+import com.example.quizzfirstprojecthadp.main.MainActivity.Companion.info
 import kotlin.random.Random
 import kotlin.random.nextInt
 

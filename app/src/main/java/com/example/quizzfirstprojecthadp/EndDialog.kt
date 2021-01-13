@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import com.example.quizzfirstprojecthadp.MainActivity.Companion.info
+import com.example.quizzfirstprojecthadp.main.MainActivity.Companion.info
 import com.example.quizzfirstprojecthadp.game.GameActivity
 
 class EndDialog: DialogFragment(){

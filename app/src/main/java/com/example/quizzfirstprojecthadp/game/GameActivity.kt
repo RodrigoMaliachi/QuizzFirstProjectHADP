@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.example.quizzfirstprojecthadp.EndDialog
-import com.example.quizzfirstprojecthadp.MainActivity
+import com.example.quizzfirstprojecthadp.main.MainActivity
 import com.example.quizzfirstprojecthadp.R
 
 class GameActivity : AppCompatActivity() {
@@ -29,7 +29,7 @@ class GameActivity : AppCompatActivity() {
 
     private lateinit var viewModel: GameViewModel
 
-    companion object{
+    companion object {
         var score = 0.0
     }
 
