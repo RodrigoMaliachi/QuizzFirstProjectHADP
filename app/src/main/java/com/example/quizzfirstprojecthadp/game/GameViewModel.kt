@@ -1,9 +1,10 @@
 package com.example.quizzfirstprojecthadp.game
 
 import androidx.lifecycle.ViewModel
+import com.example.quizzfirstprojecthadp.database.AppDatabase
 import com.example.quizzfirstprojecthadp.main.MainActivity.Companion.info
 
-class GameViewModel : ViewModel() {
+class GameViewModel(val database: AppDatabase) : ViewModel() {
 
     var score = 0.0
     private val initializer = QuestionsInitializer()

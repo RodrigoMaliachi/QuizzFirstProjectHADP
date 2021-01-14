@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val info = Information()
+        const val PLAYER_ID = "player_id"
     }
 
     private lateinit var playButton: Button
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         optionsButton.setOnClickListener {
             val intent = Intent(this, OptionsActivity::class.java)
+            intent.putExtra(PLAYER_ID, viewModel.player.playerId)
             startActivity(intent)
         }
 

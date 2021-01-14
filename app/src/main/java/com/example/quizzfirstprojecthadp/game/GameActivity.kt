@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.quizzfirstprojecthadp.EndDialog
 import com.example.quizzfirstprojecthadp.main.MainActivity
 import com.example.quizzfirstprojecthadp.R
+import com.example.quizzfirstprojecthadp.database.AppDatabase
 
 class GameActivity : AppCompatActivity() {
 
@@ -28,6 +29,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var radioGroup: RadioGroup
 
     private lateinit var viewModel: GameViewModel
+    private lateinit var database: AppDatabase
 
     companion object {
         var score = 0.0
@@ -39,7 +41,9 @@ class GameActivity : AppCompatActivity() {
 
         score = 0.0
 
-        viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
+        database = AppDatabase.getInstance(this.applicationContext)
+        val factory = GameViewModelFactory(database)
+        viewModel = ViewModelProvider(this, factory).get(GameViewModel::class.java)
 
         questionNumberTextView = findViewById(R.id.questionNumber)
         hintsUsedTextView = findViewById(R.id.hintsUsed)

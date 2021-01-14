@@ -15,23 +15,23 @@ data class Settings (
     @ColumnInfo(name = "player_id")
     var playerId: Int = 0,
 
-    @ColumnInfo(name = "art", typeAffinity = ColumnInfo.INTEGER)
-    var art: Boolean = true,
+    @ColumnInfo(name = "anime", typeAffinity = ColumnInfo.INTEGER)
+    var anime: Boolean = true,
 
-    @ColumnInfo(name = "culture", typeAffinity = ColumnInfo.INTEGER)
-    var culture: Boolean = true,
+    @ColumnInfo(name = "cine", typeAffinity = ColumnInfo.INTEGER)
+    var cine: Boolean = true,
 
-    @ColumnInfo(name = "geography", typeAffinity = ColumnInfo.INTEGER)
-    var geography: Boolean = true,
+    @ColumnInfo(name = "furry", typeAffinity = ColumnInfo.INTEGER)
+    var furry: Boolean = true,
 
-    @ColumnInfo(name = "history", typeAffinity = ColumnInfo.INTEGER)
-    var history: Boolean = true,
+    @ColumnInfo(name = "deportes", typeAffinity = ColumnInfo.INTEGER)
+    var deportes: Boolean = true,
 
-    @ColumnInfo(name = "music", typeAffinity = ColumnInfo.INTEGER)
-    var music: Boolean = true,
+    @ColumnInfo(name = "toons", typeAffinity = ColumnInfo.INTEGER)
+    var toons: Boolean = true,
 
-    @ColumnInfo(name = "video_games", typeAffinity = ColumnInfo.INTEGER)
-    var videoGames: Boolean = true,
+    @ColumnInfo(name = "videojuegos", typeAffinity = ColumnInfo.INTEGER)
+    var videojuegos: Boolean = true,
 
     @ColumnInfo(name = "difficulty")
     var difficulty: Int = 2,

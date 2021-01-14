@@ -7,6 +7,10 @@ import android.widget.*
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.quizzfirstprojecthadp.R
+import com.example.quizzfirstprojecthadp.database.AppDatabase
+import com.example.quizzfirstprojecthadp.database.SettingsDao
+import com.example.quizzfirstprojecthadp.main.MainActivity
+import com.example.quizzfirstprojecthadp.main.MainActivity.Companion.PLAYER_ID
 
 class OptionsActivity : AppCompatActivity() {
 
@@ -27,12 +31,16 @@ class OptionsActivity : AppCompatActivity() {
     private lateinit var hintSpinnerLayout: LinearLayout
 
     private lateinit var viewModel: OptionsViewModel
+    private lateinit var database: SettingsDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_options)
 
-        viewModel = ViewModelProvider(this).get(OptionsViewModel::class.java)
+        val playerId = intent.getIntExtra(PLAYER_ID, 0)
+        database = AppDatabase.getInstance(this.applicationContext).settingsDao
+        val factory = OptionsViewModelFactory(database, playerId)
+        viewModel = ViewModelProvider(this, factory).get(OptionsViewModel::class.java)
 
         animeBox = findViewById(R.id.animeCheckBox)
         cineBox = findViewById(R.id.cineCheckBox)
@@ -137,5 +145,10 @@ class OptionsActivity : AppCompatActivity() {
                 todosBox.visibility = View.VISIBLE
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        database.update(viewModel.settings)
     }
 }

@@ -11,13 +11,8 @@ class MainViewModel(val database: PlayerDao): ViewModel() {
     val player
         get() = _player
 
-    private var _imageResource: Int
     val imageResource
-        get() = _imageResource
-
-    init {
-        _player = database.getActivePlayer()
-        _imageResource = when (player.profileImage) {
+        get() = when (player.profileImage) {
             1 -> R.drawable.avatar_01
             2 -> R.drawable.avatar_02
             3 -> R.drawable.avatar_03
@@ -35,6 +30,9 @@ class MainViewModel(val database: PlayerDao): ViewModel() {
             15 -> R.drawable.avatar_15
             else -> R.drawable.avatar_16
         }
+
+    init {
+        _player = database.getActivePlayer()
     }
 
     fun updateActivePlayer() { _player = database.getActivePlayer() }

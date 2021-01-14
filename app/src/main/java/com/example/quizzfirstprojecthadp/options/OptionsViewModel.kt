@@ -5,41 +5,43 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import androidx.lifecycle.ViewModel
-
-import com.example.quizzfirstprojecthadp.main.MainActivity.Companion.info
 import com.example.quizzfirstprojecthadp.R
+import com.example.quizzfirstprojecthadp.database.Settings
+import com.example.quizzfirstprojecthadp.database.SettingsDao
 
-class OptionsViewModel : ViewModel() {
+class OptionsViewModel(val database: SettingsDao, val playerId: Int) : ViewModel() {
+
+    val settings: Settings = database.getSettingsFromPlayer(playerId)
 
     var isEverythingChecked: Boolean
 
     var isAtLeastOneChecked: Boolean
 
     var questionsQuantity: Int
-        get() = info.questionsQuantity
-        set(value) { info.questionsQuantity = value }
+        get() = settings.questionsQuantity
+        set(value) { settings.questionsQuantity = value }
 
     var hintsQuantity: Int
-        get() = info.hintsQuantity
-        set(value) { info.hintsQuantity = value }
+        get() = settings.hintsQuantity
+        set(value) { settings.hintsQuantity = value }
 
     var difficulty: Int
-        get() = info.difficulty
-        set(value) { info.difficulty = value }
+        get() = settings.difficulty
+        set(value) { settings.difficulty = value }
 
     var isHintsEnabled: Boolean
-        get() = info.isHintsEnabled
-        set(value) { info.isHintsEnabled = value }
+        get() = settings.hintsEnabled
+        set(value) { settings.hintsEnabled = value }
 
     init {
-        info.apply {
+        settings.apply {
             isAtLeastOneChecked = anime || cine || furry || deportes || toons || videojuegos
             isEverythingChecked = anime && cine && furry && deportes && toons && videojuegos
         }
     }
 
     fun initializeBoxes(boxes: List<CheckBox>) {
-        info.apply {
+        settings.apply {
             for (box in boxes) {
                 when (box.id) {
                     R.id.animeCheckBox -> box.isChecked = anime
@@ -55,7 +57,7 @@ class OptionsViewModel : ViewModel() {
     }
 
     fun changeTopics(id: Int, isChecked: Boolean) {
-        info.apply {
+        settings.apply {
             when (id) {
                 R.id.animeCheckBox -> anime = isChecked
                 R.id.cineCheckBox -> cine = isChecked

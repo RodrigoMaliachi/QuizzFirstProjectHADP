@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Game::class, Player::class, Question::class, QuestionSaved::class, Score::class, Settings::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -39,6 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
                         "app_database"
                     )
                         .allowMainThreadQueries()
+                        .fallbackToDestructiveMigration()
                         .addCallback(callback)
                         .build()
                     INSTANCE = instance
@@ -130,9 +131,9 @@ abstract class AppDatabase : RoomDatabase() {
                 db.execSQL("INSERT INTO players (name, profile_image, active) VALUES ('Player3', 3, 0)")
 
                 //Insertar opciones.
-                db.execSQL("INSERT INTO settings(player_id, art, culture, geography, history, music, video_games, difficulty, questions_quantity, hints_enabled, clues_quantity) VALUES (1, 1, 1, 1, 1, 1, 1, 2, 10, 0, 0)")
-                db.execSQL("INSERT INTO settings(player_id, art, culture, geography, history, music, video_games, difficulty, questions_quantity, hints_enabled, clues_quantity) VALUES (2, 1, 1, 1, 1, 1, 1, 2, 10, 0, 0)")
-                db.execSQL("INSERT INTO settings(player_id, art, culture, geography, history, music, video_games, difficulty, questions_quantity, hints_enabled, clues_quantity) VALUES (3, 1, 1, 1, 1, 1, 1, 2, 10, 0, 0)")
+                db.execSQL("INSERT INTO settings(player_id, anime, cine, furry, deportes, toons, videojuegos, difficulty, questions_quantity, hints_enabled, clues_quantity) VALUES (1, 1, 1, 1, 1, 1, 1, 2, 10, 0, 0)")
+                db.execSQL("INSERT INTO settings(player_id, anime, cine, furry, deportes, toons, videojuegos, difficulty, questions_quantity, hints_enabled, clues_quantity) VALUES (2, 1, 1, 1, 1, 1, 1, 2, 10, 0, 0)")
+                db.execSQL("INSERT INTO settings(player_id, anime, cine, furry, deportes, toons, videojuegos, difficulty, questions_quantity, hints_enabled, clues_quantity) VALUES (3, 1, 1, 1, 1, 1, 1, 2, 10, 0, 0)")
             }
         }
     }
