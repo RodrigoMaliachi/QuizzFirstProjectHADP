@@ -32,6 +32,9 @@
     <string name="okay">Okay</string>
     <string name="default_user">Usuario</string>
     <string name="score_button">Puntuaciones</string>
+    <string name="new_game_message">Tienes un juego guardado. ¿Deseas continuar?</string>
+    <string name="new_game_possitive_button">Continuar</string>
+    <string name="new_game_neutral_button">Nuevo Juego</string>
 
     <string-array name="question_spinner">
         <item>5</item>

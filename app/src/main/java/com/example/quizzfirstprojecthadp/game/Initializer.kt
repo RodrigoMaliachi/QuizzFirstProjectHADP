@@ -32,27 +32,31 @@ class Initializer(val database: AppDatabase) {
     init {
         _game = database.gameDao.getGame(playerId)
         _game?.let {
+            getTheOldQuestions()
             if (it.isFinished) { //Si se terminó el juego, hay que crear uno nuevo
+
+                database.questionSavedDao.delete(_questionsSaved)
+                _questionsSaved.clear()
+                _questions.clear()
 
                 //Se reinician los valores del nuevo juego
                 it.isFinished = false
-                it.hints = settings.hintsQuantity
-                it.state = 0
+                it.hints = if (settings.hintsEnabled) settings.hintsQuantity else 0
+                it.questionIndex = 0
+                it.hintsUsed = 0
 
                 newQuestions()
 
                 //Actualizamos el nuevo juego en la base de datos
                 database.gameDao.update(it)
             }
-            else { //Sino se termino hay que obtener la información de nuevo
-                getTheOldQuestions()
-            }
         } ?: newPlayer() //Si la base de datos no tiene información sobre un juego guardado, entonces, el usuario es nuevo
     }
 
     private fun newPlayer() {
         //Primero a la variable _game le agregaré una nueva instancia de Game con valores predeterminados
-        _game = Game(playerId = playerId, isFinished = false, state = 0, hints = settings.hintsQuantity)
+        _game = Game(playerId = playerId, isFinished = false)
+        _game?.hints = if (settings.hintsEnabled) settings.hintsQuantity else 0
 
         newQuestions()
 
@@ -102,16 +106,12 @@ class Initializer(val database: AppDatabase) {
                             else -> Random.nextInt(1..24)
                         }
 
-                //Devuelve una 1 de las 10 combinaciones posibles para usar la pista
-                val hintOrder =
-                    if (settings.hintsEnabled) getHintOrder(arranged, settings.difficulty) else 0
                 val newQuestionSaved = QuestionSaved(
                     playerId = playerId,
                     questionId = questionId,
                     arranged = arranged,
-                    answered = 0,
-                    hintOrder = hintOrder,
-                    isHintUsed = false
+                    answer = 0,
+                    optionsDisabled = "",
                 )
                 database.questionSavedDao.insert(newQuestionSaved)
             }
@@ -121,9 +121,8 @@ class Initializer(val database: AppDatabase) {
                 playerId = playerId,
                 questionId = 0,
                 arranged = 0,
-                answered = 0,
-                hintOrder = 0,
-                isHintUsed = false
+                answer = 0,
+                optionsDisabled = "",
             )
             //Se agrega UNA sola vez a las preguntas guardadas aunque la cantidad de preguntas sea menor a 9
             database.questionSavedDao.insert(emptyQuestion)
@@ -137,14 +136,11 @@ class Initializer(val database: AppDatabase) {
                 _questions.add(
                     database.questionDao.getQuestion(questionSaved.questionId)
                 )
+            } else repeat(10-_questions.size){
+                _questionsSaved.add(questionSaved)
             }
         }
-        questionsSavedList.forEach { questionSaved ->
-            if (questionSaved.questionId == 0)
-                repeat(10-_questions.size){
-                    _questionsSaved.add(questionSaved)
-                }
-        }
+
         _game?.question1 = this._questionsSaved.elementAt(0).questionSavedId
         _game?.question2 = this._questionsSaved.elementAt(1).questionSavedId
         _game?.question3 = this._questionsSaved.elementAt(2).questionSavedId
@@ -180,23 +176,6 @@ class Initializer(val database: AppDatabase) {
             }
             listaCantidadPreguntas.shuffled()
         } else  listaCantidadPreguntas.toList()
-    }
-
-    private fun getHintOrder(arranged: Int, difficulty: Int): Int {
-        return if (difficulty == 1)
-            when (arranged){
-                in 1..6 -> listOf(6,7,9).shuffled().first()
-                in 7..12 -> listOf(3,4,9).shuffled().first()
-                in 13..18 -> listOf(2,4,7).shuffled().first()
-                else -> listOf(2,3,6).shuffled().first()
-            }
-        else
-            when (arranged) {
-                in 1..6 -> listOf(5,8,10).shuffled().first()
-                in 7..12 -> listOf(1,8,10).shuffled().first()
-                in 13..18 -> listOf(1,5,10).shuffled().first()
-                else -> listOf(1,5,8).shuffled().first()
-            }
     }
 
     private fun getTheOldQuestions(){

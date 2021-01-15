@@ -7,11 +7,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "questions_saved")
 data class QuestionSaved(
-    @PrimaryKey(autoGenerate = true)
+        @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "question_saved_id")
     var questionSavedId: Int = 0,
 
-    @ForeignKey(
+        @ForeignKey(
         entity = Player::class,
         parentColumns = ["player_id"],
         childColumns = ["player_id"]
@@ -19,7 +19,7 @@ data class QuestionSaved(
     @ColumnInfo(name = "player_id")
     var playerId: Int = 0,
 
-    @ForeignKey(
+        @ForeignKey(
         entity = Question::class,
         parentColumns = ["question_id"],
         childColumns = ["question_id"]
@@ -27,7 +27,7 @@ data class QuestionSaved(
     @ColumnInfo(name = "question_id")
     var questionId: Int = 0,
 
-    @ColumnInfo(name = "arranged")
+        @ColumnInfo(name = "arranged")
     var arranged: Int = 0,
     /*Orden:
         1       1234
@@ -56,8 +56,8 @@ data class QuestionSaved(
         24      4321    // 19 - 24 space 4
      */
 
-    @ColumnInfo(name = "answered")
-    var answered: Int = 0,
+    @ColumnInfo(name = "answer")
+    var answer: Int = 0,
     /*
         0   initialize
         1   option 1
@@ -66,22 +66,33 @@ data class QuestionSaved(
         4   option 4
     */
 
-    @ColumnInfo(name = "hint_order")
-    var hintOrder: Int = 0,
-    /* Hint order
-        0 is for difficulty == hard
-        01   1000   normal 2,3,4
-        02   1100   easy 3,4
-        03   1010   easy 2,4
-        04   1001   easy 2,3
-        05   0100   normal 1,3,4
-        06   0110   easy 1,4
-        07   0101   easy 1,3
-        08   0010   normal 1,2,4
-        09   0011   easy 1,2
-        10   0001   normal 1,2,3
-    */
-
-    @ColumnInfo(name = "is_hint_used", typeAffinity = ColumnInfo.INTEGER)
-    var isHintUsed: Boolean = false
-)
+    @ColumnInfo(name = "options_disabled")
+    var optionsDisabled: String = "",
+) {
+    fun getConvertedArrange() = when (arranged) {
+        1 -> 1234
+        2 -> 1243
+        3 -> 1324
+        4 -> 1423
+        5 -> 1342
+        6 -> 1432
+        7 -> 2134
+        8 -> 2143
+        9 -> 3124
+        10 -> 4123
+        11 -> 3142
+        12 -> 4132
+        13 -> 2314
+        14 -> 2413
+        15 -> 3214
+        16 -> 4213
+        17 -> 3412
+        18 -> 4312
+        19 -> 2341
+        20 -> 2431
+        21 -> 3241
+        22 -> 4231
+        23 -> 3421
+        else -> 4321
+    }
+}

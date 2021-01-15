@@ -3,6 +3,7 @@ package com.example.quizzfirstprojecthadp.main
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.quizzfirstprojecthadp.Information
@@ -29,8 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val database = AppDatabase.getInstance(this.applicationContext).playerDao
-        val factory = MainViewModelFactory(database)
+        val database = AppDatabase.getInstance(this.applicationContext)
+        val factory = MainViewModelFactory(database.playerDao)
         val viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
         playButton = findViewById(R.id.playButton)
@@ -44,8 +45,39 @@ class MainActivity : AppCompatActivity() {
         userName.text = viewModel.player.name
 
         playButton.setOnClickListener {
-            val intent = Intent(this, GameActivity::class.java)
-            startActivityForResult(intent, 1)
+
+            val playerId = database.playerDao.getActivePlayer().playerId
+            val game = database.gameDao.getGame(playerId)
+
+            game?.let {
+                if (!it.isFinished) {
+                    this.let {
+                        val builder = AlertDialog.Builder(it)
+                        builder.setMessage(R.string.new_game_message)
+                        builder.apply {
+                            setPositiveButton(R.string.new_game_possitive_button) { _, _ ->
+                                val intent = Intent(this@MainActivity, GameActivity::class.java)
+                                startActivity(intent)
+                            }
+                            setNeutralButton(R.string.new_game_neutral_button) { _, _ ->
+                                game.isFinished = true
+                                database.gameDao.update(game)
+                                val intent = Intent(this@MainActivity, GameActivity::class.java)
+                                startActivity(intent)
+                            }
+                        }
+                        builder.create()
+                    }.show()
+                } else {
+                    val intent = Intent(this@MainActivity, GameActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            if (game == null) {
+                val intent = Intent(this@MainActivity, GameActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         optionsButton.setOnClickListener {

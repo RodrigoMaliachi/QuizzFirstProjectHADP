@@ -65,7 +65,7 @@ class GameActivity : AppCompatActivity() {
                     button3.visibility = View.INVISIBLE
             }
 
-            if (!MainActivity.info.isHintsEnabled) {
+            if (hintsQuantity == 0) {
                 hintsUsedTextView.visibility = View.INVISIBLE
             }
 
@@ -73,7 +73,7 @@ class GameActivity : AppCompatActivity() {
 
             questionNumberTextView.text = questionNumberCounterString
             hintsUsedTextView.text = hintsUsedCounterString
-            questionTextView.text = currentQuestion.question
+            questionTextView.text = questionString
             button1.text = option1
             button2.text = option2
             button3.text = option3
@@ -113,7 +113,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun GameViewModel.updateScreen() {
         questionNumberTextView.text = questionNumberCounterString
-        questionTextView.text = currentQuestion.question
+        questionTextView.text = questionString
         button1.text = option1
         button2.text = option2
         button3.text = option3
@@ -125,21 +125,13 @@ class GameActivity : AppCompatActivity() {
 
     private val radioButtonListener = CompoundButton.OnCheckedChangeListener { button, isChecked ->
         viewModel.apply {
-            if (isChecked && currentQuestionInfo.answer == 0) {
-                currentQuestionInfo.answer =
-                    when (button.id) {
-                        R.id.optionOne -> 1
-                        R.id.optionTwo -> 2
-                        R.id.optionThree -> 3
-                        else -> 4
-                    }
+            if (isChecked && this.answer == 0) {
+                changeAnswer(button.id)
 
-                addPoints()
+//                addPoints()
 
                 if (isFinish()) {
-                    val dialog = EndDialog()
-                    GameActivity.score = score
-                    dialog.show(supportFragmentManager, "End Game")
+                    finish()
                 }
             }
         }
@@ -147,7 +139,6 @@ class GameActivity : AppCompatActivity() {
 
     private fun updateColors() {
         viewModel.apply {
-            val answer = questionsInfoList[currentQuestionIndex].answer
             button1.setBackgroundColor(Color.TRANSPARENT)
             button2.setBackgroundColor(Color.TRANSPARENT)
             button3.setBackgroundColor(Color.TRANSPARENT)
@@ -166,13 +157,13 @@ class GameActivity : AppCompatActivity() {
                     space3 == 1 -> button3.setBackgroundColor(Color.GREEN)
                     space4 == 1 -> button4.setBackgroundColor(Color.GREEN)
                 }
-            } else if (MainActivity.info.isHintsEnabled && currentQuestionInfo.hintsUsedList.isNotEmpty()) {
-                currentQuestionInfo.hintsUsedList.forEach {
-                    when (it) {
-                        1 -> button1.visibility = View.INVISIBLE
-                        2 -> button2.visibility = View.INVISIBLE
-                        3 -> button3.visibility = View.INVISIBLE
-                        4 -> button4.visibility = View.INVISIBLE
+            } else if (hintsQuantity > 0 && optionsDisabled.isNotEmpty()) {
+                optionsDisabled.forEach {
+                    when {
+                        space1 == it.toString().toInt() -> button1.visibility = View.INVISIBLE
+                        space2 == it.toString().toInt() -> button2.visibility = View.INVISIBLE
+                        space3 == it.toString().toInt() -> button3.visibility = View.INVISIBLE
+                        space4 == it.toString().toInt() -> button4.visibility = View.INVISIBLE
                     }
                 }
             }
@@ -191,7 +182,7 @@ class GameActivity : AppCompatActivity() {
             if (difficulty > 2)
                 button4.visibility = View.VISIBLE
 
-            if (questionsInfoList[currentQuestionIndex].answer == 0) {
+            if (answer == 0) {
                 button1.isClickable = true
                 button2.isClickable = true
                 button3.isClickable = true
@@ -207,7 +198,7 @@ class GameActivity : AppCompatActivity() {
                 button3.isClickable = false
                 button4.isClickable = false
 
-                when (questionsInfoList[currentQuestionIndex].answer) {
+                when (answer) {
                     1 -> button1.isChecked = true
                     2 -> button2.isChecked = true
                     3 -> button3.isChecked = true
@@ -215,5 +206,10 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveQuestionIndex()
     }
 }

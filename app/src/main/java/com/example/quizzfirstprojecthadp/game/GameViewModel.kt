@@ -1,27 +1,43 @@
 package com.example.quizzfirstprojecthadp.game
 
 import androidx.lifecycle.ViewModel
+import com.example.quizzfirstprojecthadp.R
 import com.example.quizzfirstprojecthadp.database.AppDatabase
-import com.example.quizzfirstprojecthadp.main.MainActivity.Companion.info
+import com.example.quizzfirstprojecthadp.database.Game
+import com.example.quizzfirstprojecthadp.database.Question
+import com.example.quizzfirstprojecthadp.database.QuestionSaved
 
 class GameViewModel(val database: AppDatabase) : ViewModel() {
 
-    var score = 0.0
-    private val initializer = QuestionsInitializer()
+    private val initializer = Initializer(database)
+    private val game: Game
 
-    val questionsInfoList = initializer.getQuestionsInfoList()
-    private val questionsList = initializer.getQuestionList(questionsInfoList)
-    private val possibleHints = mutableListOf(1,2,3,4)
+    private val questionsSaved: List<QuestionSaved>
+    private val questions: List<Question>
 
-    private val questionQuantity = info.questionsQuantity
-    private val hintsQuantity = info.hintsQuantity
+    private var qIndex: Int //questionIndex
 
-    var currentQuestionIndex = 0
-    var currentQuestion = questionsList[currentQuestionIndex]
-    var currentQuestionInfo = questionsInfoList[currentQuestionIndex]
-    var hintsUsed = 0
-    val difficulty = info.difficulty
-    var isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && currentQuestionInfo.answer == 0
+    private val questionQuantity: Int
+        get() = questions.size
+
+    private val cQuestion //currentQuestion
+        get() = questions[qIndex]
+
+    private val cQuestionSaved: QuestionSaved //currentQuestionSaved
+        get() = questionsSaved[qIndex]
+
+    val difficulty: Int
+        get() = initializer.difficulty
+    val hintsQuantity: Int
+        get() = game.hints
+    val isHintClickable
+        get() = game.hintsUsed < hintsQuantity && cQuestionSaved.answer == 0
+    val questionString
+        get() = questions[qIndex].question
+    val answer
+        get() = questionsSaved[qIndex].answer
+    val optionsDisabled
+        get() = questionsSaved[qIndex].optionsDisabled.toList()
 
     var space1 = 0
     var space2 = 0
@@ -34,52 +50,53 @@ class GameViewModel(val database: AppDatabase) : ViewModel() {
     var option4 = ""
 
     val questionNumberCounterString: String
-        get() = "Pregunta: ${currentQuestionIndex + 1}/$questionQuantity"
+        get() = "Pregunta: ${qIndex + 1}/$questionQuantity"
 
     val hintsUsedCounterString: String
-        get() = "Pistas usadas: $hintsUsed/$hintsQuantity"
+        get() = "Pistas usadas: ${game.hintsUsed}/$hintsQuantity"
 
     init {
+        game = initializer.game
+        questionsSaved = initializer.questionSaved
+        questions = initializer.questions.toMutableList()
+        qIndex = game.questionIndex
         updateOptions()
     }
 
     fun hintUsed(){
-        hintsUsed++
-
-        if (possibleHints.size > 1) {
-            currentQuestionInfo.hintsUsedList.add(possibleHints[0])
-            possibleHints.removeAt(0)
-        } else {
-            currentQuestionInfo.answer =
-                when {
-                    space1 == 1 -> 1
-                    space2 == 1 -> 2
-                    space3 == 1 -> 3
-                    else -> 4
-                }
+        game.hintsUsed++
+        val arrange = cQuestionSaved.getConvertedArrange().toString().toMutableList()
+        if (difficulty < 3) {
+            arrange.removeAt(3)
+            if (difficulty < 2)
+                arrange.removeAt(2)
         }
-
-        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && currentQuestionInfo.answer == 0
+        arrange.remove('1')
+        cQuestionSaved.optionsDisabled.forEach { arrange.remove(it) }
+        questionsSaved[qIndex].optionsDisabled += arrange.shuffled().first().toString()
+        if (cQuestionSaved.optionsDisabled.length == difficulty)
+            questionsSaved[qIndex].answer = when {
+                space1 == 1 -> 1
+                space2 == 1 -> 2
+                space3 == 1 -> 3
+                else -> 4
+            }
+        database.gameDao.update(game)
+        database.questionSavedDao.update(cQuestionSaved)
     }
 
     fun previous() {
-        currentQuestionIndex = (currentQuestionIndex - 1 + questionQuantity) % questionQuantity
-        currentQuestion = questionsList[currentQuestionIndex]
-        currentQuestionInfo = questionsInfoList[currentQuestionIndex]
-        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && currentQuestionInfo.answer == 0
+        qIndex = (qIndex - 1 + questionQuantity) % questionQuantity
         updateOptions()
     }
 
     fun next() {
-        currentQuestionIndex = (currentQuestionIndex + 1 + questionQuantity) % questionQuantity
-        currentQuestion = questionsList[currentQuestionIndex]
-        currentQuestionInfo = questionsInfoList[currentQuestionIndex]
-        isHintClickable = info.isHintsEnabled && hintsUsed < hintsQuantity && currentQuestionInfo.answer == 0
+        qIndex = (qIndex + 1 + questionQuantity) % questionQuantity
         updateOptions()
     }
 
     private fun updateOptions() {
-        var arrange = currentQuestionInfo.getConvertedArrange()
+        var arrange = cQuestionSaved.getConvertedArrange()
         space1 = arrange / 1000
         arrange -= space1 * 1000
         space2 = arrange / 100
@@ -91,51 +108,52 @@ class GameViewModel(val database: AppDatabase) : ViewModel() {
         option2 = optionForSpace(space2)
         option3 = optionForSpace(space3)
         option4 = optionForSpace(space4)
-
-        if (info.isHintsEnabled) {
-            updatePossibleHintsList()
-        }
-    }
-
-    private fun updatePossibleHintsList() {
-        possibleHints.clear()
-        if (difficulty == 3)
-            if (space4 != 1) possibleHints.add(4)
-
-        if (difficulty > 1)
-            if (space3 != 1) possibleHints.add(3)
-
-        if (space2 != 1) possibleHints.add(2)
-        if (space1 != 1) possibleHints.add(1)
-
-        possibleHints.shuffle()
     }
 
     private fun optionForSpace(space: Int): String {
         return when (space) {
-            1 -> currentQuestion.option1
-            2 -> currentQuestion.option2
-            3 -> currentQuestion.option3
-            else -> currentQuestion.option4
+            1 -> cQuestion.option1
+            2 -> cQuestion.option2
+            3 -> cQuestion.option3
+            else -> cQuestion.option4
         }
     }
 
     fun isFinish() : Boolean {
         var questionsAnswered = 0
-        questionsInfoList.forEach {
+        questionsSaved.forEach {
             if (it.answer != 0)
                 questionsAnswered++
         }
-        return questionsAnswered == questionsInfoList.size
+        database.questionSavedDao.update(cQuestionSaved)
+        game.isFinished = questionsAnswered == questionQuantity
+        if (game.isFinished) {
+            database.gameDao.update(game)
+        }
+        return game.isFinished
     }
 
-    fun addPoints() {
-        score += when {
-            currentQuestionInfo.answer == 1 && space1 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
-            currentQuestionInfo.answer == 2 && space2 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
-            currentQuestionInfo.answer == 3 && space3 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
-            currentQuestionInfo.answer == 4 && space4 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
-            else -> 0.0
+    fun changeAnswer(id: Int) {
+        questionsSaved[qIndex].answer = when (id) {
+            R.id.optionOne -> 1
+            R.id.optionTwo -> 2
+            R.id.optionThree -> 3
+            else -> 4
         }
     }
+
+    fun saveQuestionIndex() {
+        game.questionIndex = qIndex
+        database.gameDao.update(game)
+    }
+
+//    fun addPoints() {
+//        score += when {
+//            currentQuestionInfo.answer == 1 && space1 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
+//            currentQuestionInfo.answer == 2 && space2 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
+//            currentQuestionInfo.answer == 3 && space3 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
+//            currentQuestionInfo.answer == 4 && space4 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
+//            else -> 0.0
+//        }
+//    }
 }
