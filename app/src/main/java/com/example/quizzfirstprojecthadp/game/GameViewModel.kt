@@ -2,11 +2,9 @@ package com.example.quizzfirstprojecthadp.game
 
 import androidx.lifecycle.ViewModel
 import com.example.quizzfirstprojecthadp.R
-import com.example.quizzfirstprojecthadp.database.AppDatabase
-import com.example.quizzfirstprojecthadp.database.Game
-import com.example.quizzfirstprojecthadp.database.Question
-import com.example.quizzfirstprojecthadp.database.QuestionSaved
+import com.example.quizzfirstprojecthadp.database.*
 
+@Suppress("TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING")
 class GameViewModel(val database: AppDatabase) : ViewModel() {
 
     private val initializer = Initializer(database)
@@ -58,7 +56,7 @@ class GameViewModel(val database: AppDatabase) : ViewModel() {
     init {
         game = initializer.game
         questionsSaved = initializer.questionSaved
-        questions = initializer.questions.toMutableList()
+        questions = initializer.questions
         qIndex = game.questionIndex
         updateOptions()
     }
@@ -147,13 +145,19 @@ class GameViewModel(val database: AppDatabase) : ViewModel() {
         database.gameDao.update(game)
     }
 
-//    fun addPoints() {
-//        score += when {
-//            currentQuestionInfo.answer == 1 && space1 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
-//            currentQuestionInfo.answer == 2 && space2 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
-//            currentQuestionInfo.answer == 3 && space3 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
-//            currentQuestionInfo.answer == 4 && space4 == 1 -> difficulty * 100.0 /(currentQuestionInfo.hintsUsedList.size + 1)
-//            else -> 0.0
-//        }
-//    }
+    fun newScore(): Int {
+        var score = 0.0
+        questionsSaved.forEach {
+            val correctAnswer: Int = it.getConvertedArrange().toString().toList().indexOf('1').toString().toInt().plus(1)
+            if (it.answer == correctAnswer)
+                score += difficulty * 100.0 / (it.optionsDisabled.length + 1)
+        }
+        val newScore = Score(
+            playerId = initializer.playerId,
+            score = score.toInt(),
+            hintsWasUsed = game.hintsUsed > 0
+        )
+        database.scoreDao.insert(newScore)
+        return score.toInt()
+    }
 }

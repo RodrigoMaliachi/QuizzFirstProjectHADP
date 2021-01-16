@@ -16,5 +16,11 @@ data class Score(
     var playerId: Int = 0,
 
     @ColumnInfo(name = "score")
-    var score: Int = 0
+    var score: Int = 0,
+
+    @ColumnInfo(name = "hints_was_used")
+    var hintsWasUsed: Boolean = false,
+
+    @ColumnInfo(name = "date")
+    var date: Long = 0
 )

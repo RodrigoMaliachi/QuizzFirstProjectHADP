@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Game::class, Player::class, Question::class, QuestionSaved::class, Score::class, Settings::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -39,8 +39,8 @@ abstract class AppDatabase : RoomDatabase() {
                         "app_database"
                     )
                         .allowMainThreadQueries()
-                        .fallbackToDestructiveMigration()
                         .addCallback(callback)
+                        .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
                 }

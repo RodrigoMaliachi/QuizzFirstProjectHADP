@@ -6,7 +6,6 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.quizzfirstprojecthadp.Information
 import com.example.quizzfirstprojecthadp.R
 import com.example.quizzfirstprojecthadp.database.AppDatabase
 import com.example.quizzfirstprojecthadp.game.GameActivity
@@ -15,7 +14,6 @@ import com.example.quizzfirstprojecthadp.options.OptionsActivity
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        val info = Information()
         const val PLAYER_ID = "player_id"
     }
 

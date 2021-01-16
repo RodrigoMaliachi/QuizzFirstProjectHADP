@@ -35,6 +35,10 @@
     <string name="new_game_message">Tienes un juego guardado. ¿Deseas continuar?</string>
     <string name="new_game_possitive_button">Continuar</string>
     <string name="new_game_neutral_button">Nuevo Juego</string>
+    <string name="star_for_not_using_hints">Star for not using hints</string>
+    <string name="final_score">PUNTUACIÓN FINAL</string>
+    <string name="disclaimer">*Los jugadores sin estrellas han usado pistas</string>
+    <string name="position">%d°</string>
 
     <string-array name="question_spinner">
         <item>5</item>

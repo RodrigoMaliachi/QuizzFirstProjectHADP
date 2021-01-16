@@ -1,17 +1,21 @@
 package com.example.quizzfirstprojecthadp.game
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
-import com.example.quizzfirstprojecthadp.EndDialog
-import com.example.quizzfirstprojecthadp.main.MainActivity
 import com.example.quizzfirstprojecthadp.R
 import com.example.quizzfirstprojecthadp.database.AppDatabase
+import com.example.quizzfirstprojecthadp.score.ScoreActivity
 
 class GameActivity : AppCompatActivity() {
+
+    companion object {
+        const val SCORE = "score"
+    }
 
     private lateinit var questionNumberTextView: TextView
     private lateinit var hintsUsedTextView: TextView
@@ -31,15 +35,9 @@ class GameActivity : AppCompatActivity() {
     private lateinit var viewModel: GameViewModel
     private lateinit var database: AppDatabase
 
-    companion object {
-        var score = 0.0
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-
-        score = 0.0
 
         database = AppDatabase.getInstance(this.applicationContext)
         val factory = GameViewModelFactory(database)
@@ -126,11 +124,13 @@ class GameActivity : AppCompatActivity() {
     private val radioButtonListener = CompoundButton.OnCheckedChangeListener { button, isChecked ->
         viewModel.apply {
             if (isChecked && this.answer == 0) {
+
                 changeAnswer(button.id)
 
-//                addPoints()
-
                 if (isFinish()) {
+                    val intent = Intent(this@GameActivity, ScoreActivity::class.java)
+                    intent.putExtra(SCORE, newScore())
+                    startActivity(intent)
                     finish()
                 }
             }

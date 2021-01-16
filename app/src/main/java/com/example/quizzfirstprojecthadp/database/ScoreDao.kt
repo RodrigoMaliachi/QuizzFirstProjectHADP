@@ -20,6 +20,9 @@ interface ScoreDao {
     @Query("SELECT * FROM scores WHERE player_id = :id")
     fun getPlayerScores(id: Int): List<Score>
 
+    @Query("SELECT * FROM scores ORDER BY score DESC, hints_was_used LIMIT 5")
+    fun getTop5(): List<Score>
+
     @Delete
     fun delete(scores: List<Score>)
 }
