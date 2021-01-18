@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "scores")
 data class Score(
@@ -18,9 +19,9 @@ data class Score(
     @ColumnInfo(name = "score")
     var score: Int = 0,
 
-    @ColumnInfo(name = "hints_was_used")
-    var hintsWasUsed: Boolean = false,
+    @ColumnInfo(name = "hints_used")
+    var hintsUsed: Int = 0,
 
     @ColumnInfo(name = "date")
-    var date: Long = 0
+    var date: Long = Date().time
 )

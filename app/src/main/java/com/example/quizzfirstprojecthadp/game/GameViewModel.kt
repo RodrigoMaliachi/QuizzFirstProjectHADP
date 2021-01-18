@@ -155,7 +155,7 @@ class GameViewModel(val database: AppDatabase) : ViewModel() {
         val newScore = Score(
             playerId = initializer.playerId,
             score = score.toInt(),
-            hintsWasUsed = game.hintsUsed > 0
+            hintsUsed = game.hintsUsed
         )
         database.scoreDao.insert(newScore)
         return score.toInt()

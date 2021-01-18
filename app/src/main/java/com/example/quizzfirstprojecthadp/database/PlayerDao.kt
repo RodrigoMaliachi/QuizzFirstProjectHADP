@@ -1,6 +1,5 @@
 package com.example.quizzfirstprojecthadp.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -21,20 +20,11 @@ interface PlayerDao {
     @Query("SELECT * FROM players WHERE active = 1")
     fun getActivePlayer(): Player
 
-    @Query("SELECT * FROM players WHERE active = 1")
-    fun getActivePlayerForUpdate(): Player
-
     @Query("SELECT * FROM players WHERE active = 0")
     fun getInactivePlayers(): List<Player>
 
     @Query("SELECT name FROM players")
     fun getListOfNames(): MutableList<String>
-
-    @Query("SELECT name FROM players WHERE player_id = :id")
-    fun getNameById(id: Int): String
-
-    @Query("SELECT profile_image FROM players WHERE player_id = :id")
-    fun getImageById(id: Int): Int
 
     @Query("UPDATE players SET active = 0 WHERE active = 1")
     fun updateActivePlayerToInactive()
@@ -44,4 +34,7 @@ interface PlayerDao {
 
     @Query("DELETE FROM players WHERE player_id = :id")
     fun deletePlayer(id: Int)
+
+    @Query("SELECT * FROM players")
+    fun getPlayers(): List<Player>
 }

@@ -50,6 +50,15 @@
     <string name="taken_user_name">Este nombre ya ha sido ocupado</string>
     <string name="user_updated">Usuario actualizado</string>
     <string name="user_inserted">Usuario agregado</string>
+    <string name="global_score">Puntuación Global</string>
+    <string name="players">Jugadores</string>
+    <string name="score">Puntos</string>
+    <string name="hints">Pistas</string>
+    <string name="date">Fecha</string>
+    <string name="player_statistics_name">Partidas de %s</string>
+    <string name="order_by_score">Ordenar por puntos</string>
+    <string name="order_by_date">Ordenar por fecha</string>
+    <string name="settings">Opciones</string>
 
     <string-array name="question_spinner">
         <item>5</item>

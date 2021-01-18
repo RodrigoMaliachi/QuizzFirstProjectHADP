@@ -86,17 +86,4 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/optionsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTintMode="screen"
-        android:tint="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/settings"
-        android:contentDescription="@string/options_button" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

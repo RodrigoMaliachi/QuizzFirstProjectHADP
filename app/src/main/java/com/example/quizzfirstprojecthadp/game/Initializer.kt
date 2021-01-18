@@ -9,7 +9,7 @@ import kotlin.random.nextInt
 
 class Initializer(val database: AppDatabase) {
 
-    val playerId = database.playerDao.getActivePlayerForUpdate().playerId
+    val playerId = database.playerDao.getActivePlayer().playerId
     private val settings = database.settingsDao.getSettingsFromPlayer(playerId)
 
     private var _game: Game?

@@ -37,7 +37,7 @@ class ScoreAdapter(private val names: List<String>, private val data: List<Score
             val s = "${position + 1}°"
             placeNumber.text = s
             playerName.text = names[position]
-            if (item.hintsWasUsed) {
+            if (item.hintsUsed > 0) {
                 star.visibility = View.GONE
             }
             score.text = item.score.toString()

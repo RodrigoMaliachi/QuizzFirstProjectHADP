@@ -2,6 +2,8 @@ package com.example.quizzfirstprojecthadp.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +13,7 @@ import com.example.quizzfirstprojecthadp.database.Player
 import com.example.quizzfirstprojecthadp.game.GameActivity
 import com.example.quizzfirstprojecthadp.options.OptionsActivity
 import com.example.quizzfirstprojecthadp.profile.ProfileActivity
+import com.example.quizzfirstprojecthadp.statistics.StatisticsActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var playButton: Button
-    private lateinit var optionsButton: ImageButton
     private lateinit var scoreButton: Button
     private lateinit var profileLayout: LinearLayout
     private lateinit var profileImage: ImageView
@@ -36,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         database = AppDatabase.getInstance(this.applicationContext)
 
         playButton = findViewById(R.id.playButton)
-        optionsButton = findViewById(R.id.optionsButton)
         scoreButton = findViewById(R.id.scoreButton)
         profileLayout = findViewById(R.id.profileLayout)
         profileImage = findViewById(R.id.profileImage)
@@ -81,20 +82,31 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        optionsButton.setOnClickListener {
-            val intent = Intent(this, OptionsActivity::class.java)
-            intent.putExtra(PLAYER_ID, player.playerId)
-            startActivity(intent)
-        }
-
         scoreButton.setOnClickListener {
-//            val intent = Intent(this, ScoreActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(this, StatisticsActivity::class.java)
+            startActivity(intent)
         }
 
         profileLayout.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivityForResult(intent, 0)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.options -> {
+                val intent = Intent(this, OptionsActivity::class.java)
+                intent.putExtra(PLAYER_ID, player.playerId)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

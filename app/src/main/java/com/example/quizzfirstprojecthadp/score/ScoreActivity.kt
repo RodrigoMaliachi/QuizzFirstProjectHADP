@@ -22,7 +22,7 @@ class ScoreActivity : AppCompatActivity() {
         val bestScores = database.scoreDao.getTop5()
         val names = mutableListOf<String>()
         bestScores.forEach {
-            names.add(database.playerDao.getNameById(it.playerId))
+            names.add(database.playerDao.getPlayerById(it.playerId).name)
         }
         val adapter = ScoreAdapter(names.toList(), bestScores)
 
