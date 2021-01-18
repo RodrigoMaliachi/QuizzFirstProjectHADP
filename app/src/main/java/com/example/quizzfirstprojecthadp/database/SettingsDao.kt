@@ -19,4 +19,7 @@ interface SettingsDao {
 
     @Query("SELECT * FROM settings WHERE player_id = :id")
     fun getSettingsFromPlayer(id: Int): Settings
+
+    @Query("DELETE FROM settings WHERE player_id = :id")
+    fun deletePlayerSettings(id: Int)
 }

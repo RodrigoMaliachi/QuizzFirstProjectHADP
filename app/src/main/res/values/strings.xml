@@ -39,6 +39,17 @@
     <string name="final_score">PUNTUACIÓN FINAL</string>
     <string name="disclaimer">*Los jugadores sin estrellas han usado pistas</string>
     <string name="position">%d°</string>
+    <string name="add_user">Agregar usuario</string>
+    <string name="delete_button">Delete Button</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="title">Editar Usuario</string>
+    <string name="user_name_hint">Nombre</string>
+    <string name="negative_button">Cancelar</string>
+    <string name="positive_button">Aceptar</string>
+    <string name="empty_user_name">El nombre de usuario está vacío</string>
+    <string name="taken_user_name">Este nombre ya ha sido ocupado</string>
+    <string name="user_updated">Usuario actualizado</string>
+    <string name="user_inserted">Usuario agregado</string>
 
     <string-array name="question_spinner">
         <item>5</item>

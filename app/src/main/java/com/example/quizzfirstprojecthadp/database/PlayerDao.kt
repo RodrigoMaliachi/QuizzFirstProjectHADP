@@ -25,7 +25,7 @@ interface PlayerDao {
     fun getActivePlayerForUpdate(): Player
 
     @Query("SELECT * FROM players WHERE active = 0")
-    fun getInactivePlayer(): LiveData<List<Player>>
+    fun getInactivePlayers(): List<Player>
 
     @Query("SELECT name FROM players")
     fun getListOfNames(): MutableList<String>
@@ -35,4 +35,13 @@ interface PlayerDao {
 
     @Query("SELECT profile_image FROM players WHERE player_id = :id")
     fun getImageById(id: Int): Int
+
+    @Query("UPDATE players SET active = 0 WHERE active = 1")
+    fun updateActivePlayerToInactive()
+
+    @Query("UPDATE players SET active = 1 WHERE player_id = :id")
+    fun updateInactivePlayerToActive(id: Int)
+
+    @Query("DELETE FROM players WHERE player_id = :id")
+    fun deletePlayer(id: Int)
 }

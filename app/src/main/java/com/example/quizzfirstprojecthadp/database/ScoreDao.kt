@@ -25,4 +25,7 @@ interface ScoreDao {
 
     @Delete
     fun delete(scores: List<Score>)
+
+    @Query("DELETE FROM scores WHERE player_id = :id")
+    fun deletePlayerScores(id: Int)
 }

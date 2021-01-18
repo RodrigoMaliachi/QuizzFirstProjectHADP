@@ -16,4 +16,7 @@ interface GameDao {
 
     @Query("SELECT * FROM games WHERE player_id = :id")
     fun getGame(id: Int): Game?
+
+    @Query("DELETE FROM games WHERE player_id = :id")
+    fun deletePlayerGame(id: Int)
 }

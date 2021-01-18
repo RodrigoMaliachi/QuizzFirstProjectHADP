@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.quizzfirstprojecthadp.R
 import com.example.quizzfirstprojecthadp.database.AppDatabase
+import com.example.quizzfirstprojecthadp.database.Player
 import com.example.quizzfirstprojecthadp.game.GameActivity
 import com.example.quizzfirstprojecthadp.options.OptionsActivity
+import com.example.quizzfirstprojecthadp.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,23 +25,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var profileImage: ImageView
     private lateinit var userName: TextView
 
+    private lateinit var database: AppDatabase
+    val player: Player
+        get() = database.playerDao.getActivePlayer()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val database = AppDatabase.getInstance(this.applicationContext)
-        val factory = MainViewModelFactory(database.playerDao)
-        val viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+        database = AppDatabase.getInstance(this.applicationContext)
 
         playButton = findViewById(R.id.playButton)
         optionsButton = findViewById(R.id.optionsButton)
         scoreButton = findViewById(R.id.scoreButton)
         profileLayout = findViewById(R.id.profileLayout)
         profileImage = findViewById(R.id.profileImage)
-        userName = findViewById(R.id.userName)
+        userName = findViewById(R.id.name)
 
-        profileImage.setImageResource(viewModel.imageResource)
-        userName.text = viewModel.player.name
+        profileImage.setImageResource(player.getImageResource())
+        userName.text = player.name
 
         playButton.setOnClickListener {
 
@@ -80,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
         optionsButton.setOnClickListener {
             val intent = Intent(this, OptionsActivity::class.java)
-            intent.putExtra(PLAYER_ID, viewModel.player.playerId)
+            intent.putExtra(PLAYER_ID, player.playerId)
             startActivity(intent)
         }
 
@@ -90,8 +93,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         profileLayout.setOnClickListener {
-//            val intent = Intent(this, ProfileSettings::class.java)
-//            startActivity(intent)
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivityForResult(intent, 0)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 1) {
+            profileImage.setImageResource(player.getImageResource())
+            userName.text = player.name
         }
     }
 }

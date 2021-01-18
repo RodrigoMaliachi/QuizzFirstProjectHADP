@@ -22,4 +22,7 @@ interface QuestionSavedDao {
 
     @Query("SELECT * FROM questions_saved WHERE question_saved_id = :id")
     fun getQuestionSaved(id: Int): QuestionSaved
+
+    @Query("DELETE FROM questions_saved WHERE player_id = :id")
+    fun deletePlayerQuestions(id: Int)
 }
